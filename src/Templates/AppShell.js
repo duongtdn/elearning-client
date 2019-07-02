@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react'
 
-import Header from './Widgets/Header'
 import Sidebar from './Widgets/Sidebar'
 import Navigator from './Widgets/Navigator'
 
@@ -10,12 +9,17 @@ export default class AppShell extends Component {
   constructor(props) {
     super(props)
   }
+  componentDidMount() {
+    console.log(this.props.user)
+  }
   render() {
     return (
       <div>
-        <Header />
         <Sidebar />
-        <Navigator />
+        <Navigator  user = {this.props.user}
+                    accountClient = {this.props.accountClient}
+                    template = {this.props.template}
+        />
       </div>
     )
   }
