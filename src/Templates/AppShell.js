@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react'
 
-import Sidebar from './Widgets/Sidebar'
+import Navbar from './Widgets/Navbar'
 import Navigator from './Widgets/Navigator'
 
 import CourseOverview from './Pages/CourseOverview'
@@ -28,7 +28,7 @@ export default class AppShell extends Component {
   render() {
     return (
       <div>
-        <Sidebar  navigate = {activeRoute => this.setState({activeRoute})}
+        <Navbar  navigate = {activeRoute => this.setState({activeRoute})}
         />
         <Navigator  user = {this.props.user}
                     accountClient = {this.props.accountClient}

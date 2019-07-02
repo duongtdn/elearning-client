@@ -3,7 +3,6 @@
 import React, { Component } from 'react'
 
 import Header from './Header'
-import Navbar from './Navbar'
 
 export default class Navigator extends Component {
   constructor(props) {
@@ -24,7 +23,6 @@ export default class Navigator extends Component {
                 accountClient = {this.props.accountClient}
                 template = {this.props.template}
         />
-        <Navbar />
         <div>
           {page}
         </div>
