@@ -2,6 +2,10 @@
 
 import React, { Component } from 'react'
 
+import Header from './Widgets/Header'
+import Sidebar from './Widgets/Sidebar'
+import Navigator from './Widgets/Navigator'
+
 export default class AppShell extends Component {
   constructor(props) {
     super(props)
@@ -9,7 +13,9 @@ export default class AppShell extends Component {
   render() {
     return (
       <div>
-        <h2>App Shell </h2>
+        <Header />
+        <Sidebar />
+        <Navigator />
       </div>
     )
   }
