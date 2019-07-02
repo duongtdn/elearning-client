@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 
 import Header from './Header'
-import Navbar from './NavBar'
+import Navbar from './Navbar'
 
 export default class Navigator extends Component {
   constructor(props) {
@@ -34,7 +34,7 @@ export default class Navigator extends Component {
   _renderInMediumDevice() {
     return (
       <div className="w3-hide-small" style={{position: 'relative', marginLeft: '60px'}}>
-        {this._renderPage()}        
+        {this._renderPage()}
       </div>
     )
   }
