@@ -17,7 +17,7 @@ export default class Navigator extends Component {
       </div>
     )
   }
-  _renderPage() {
+  _renderPage(page) {
     return(
       <div>
         <Header user = {this.props.user}
@@ -25,8 +25,8 @@ export default class Navigator extends Component {
                 template = {this.props.template}
         />
         <Navbar />
-        <div className="w3-container">
-          <h3 className="w3-text-blue"> Navigator </h3>
+        <div>
+          {page}
         </div>
       </div>
     )
@@ -34,14 +34,14 @@ export default class Navigator extends Component {
   _renderInMediumDevice() {
     return (
       <div className="w3-hide-small" style={{position: 'relative', marginLeft: '60px'}}>
-        {this._renderPage()}
+        {this._renderPage(this.props.route)}
       </div>
     )
   }
   _renderInSmallDevice() {
     return (
       <div className="w3-hide-medium w3-hide-large" style={{position: 'relative'}}>
-        {this._renderPage()}
+        {this._renderPage(this.props.route)}
       </div>
     )
   }
