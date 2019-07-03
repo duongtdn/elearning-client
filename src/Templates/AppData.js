@@ -14,8 +14,7 @@ const query = href.getQuery()
 export default class AppData extends Component {
   constructor(props) {
     super(props)
-    this.state = { loading: true, err: null }
-    this.content = null
+    this.state = { loading: true, err: null, content: null }
   }
   componentDidMount() {
     this.loadContent().then( content => this.setState({loading: false, content})).catch(err => this.setState({loading: false, err}))
@@ -38,7 +37,7 @@ export default class AppData extends Component {
       <AppShell user = {this.props.user}
                 accountClient = {this.props.accountClient}
                 template = {this.props.template}
-                contentId = {this.content}
+                content = {this.state.content}
       />
     )
   }

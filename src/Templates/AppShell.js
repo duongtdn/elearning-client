@@ -10,20 +10,21 @@ import StudyCentral from './Pages/StudyCentral'
 import StudyProgress from './Pages/StudyProgress'
 
 const routes = {
-  courseOverview: <CourseOverview />,
-  studyCentral: <StudyCentral />,
-  studyProgress: <StudyProgress />
+  courseOverview: CourseOverview,
+  studyCentral: StudyCentral,
+  studyProgress: StudyProgress
 }
 
 export default class AppShell extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      activeRoute: 'courseOverview'
+      activeRoute: 'studyCentral'
     }
   }
   componentDidMount() {
     console.log(this.props.user)
+    console.log(this.props.content)
   }
   render() {
     return (
@@ -34,6 +35,7 @@ export default class AppShell extends Component {
                     accountClient = {this.props.accountClient}
                     template = {this.props.template}
                     route = {routes[this.state.activeRoute]}
+                    content = {this.props.content}
         />
       </div>
     )

@@ -24,7 +24,7 @@ export default class Navigator extends Component {
                 template = {this.props.template}
         />
         <div>
-          {page}
+          {React.createElement(page, {content: this.props.content})}
         </div>
       </div>
     )
