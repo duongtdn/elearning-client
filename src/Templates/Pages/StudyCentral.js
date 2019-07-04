@@ -3,6 +3,7 @@
 import React, { Component } from 'react'
 
 import TopicDropBox from '../Widgets/TopicDropBox'
+import LessonList from '../Widgets/LessonList'
 
 export default class StudyCentral extends Component {
   constructor(props) {
@@ -13,11 +14,16 @@ export default class StudyCentral extends Component {
     }
   }
   render() {
+    const content = this.props.content
     return (
       <div className="w3-container">
-        <TopicDropBox content = {this.props.content}
+        <TopicDropBox content = {content}
                       currentTopicIndex = {this.state.currentTopicIndex}
                       onSelectTopic = { index => { this.setState({currentTopicIndex: index}) } }
+        />
+        <LessonList topic = {content.topics[this.state.currentTopicIndex]}
+                    currentIndex = {this.state.currentLessonIndex}
+                    onSelectLesson = { index => this.setState({currentLessonIndex: index}) }
         />
       </div>
     )
