@@ -10,12 +10,23 @@ function getQuery() {
   params.forEach( param => {
     const splitted = param.split('=')
     if (splitted[0]) {
-      query[splitted[0]] = splitted[1] || undefined
+      query[splitted[0]] = (splitted[1] && splitted[1].replace(/#.*$/,'')) || undefined
     }
   })
   return query
 }
 
+function getBookmark() {
+  const href = window.location.href.split('#')
+  return href[1]
+}
+
+function set(url) {
+  location.href = url
+}
+
 export default {
-  getQuery
+  getQuery,
+  getBookmark,
+  set
 }

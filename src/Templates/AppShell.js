@@ -2,6 +2,9 @@
 
 import React, { Component } from 'react'
 
+import CONST from './constant'
+import href from '../lib/href'
+
 import Navbar from './Widgets/Navbar'
 import Navigator from './Widgets/Navigator'
 
@@ -10,17 +13,20 @@ import StudyCentral from './Pages/StudyCentral'
 import StudyProgress from './Pages/StudyProgress'
 
 const routes = {
-  courseOverview: CourseOverview,
-  studyCentral: StudyCentral,
-  studyProgress: StudyProgress
+  overview: CourseOverview,
+  study: StudyCentral,
+  progress: StudyProgress
 }
 
 export default class AppShell extends Component {
   constructor(props) {
     super(props)
+    const bookmark = _validateRoute(href.getBookmark())
+    const storedActiveRoute = _validateRoute(localStorage.getItem(CONST.KEY.STORAGE.activeRoute))
     this.state = {
-      activeRoute: 'studyCentral'
+      activeRoute: storedActiveRoute || ((bookmark && (isNaN(bookmark)? bookmark : 'study')) || 'overview')
     }
+    !bookmark && href.set(`#${this.state.activeRoute}`)
   }
   componentDidMount() {
     console.log(this.props.user)
@@ -39,5 +45,15 @@ export default class AppShell extends Component {
         />
       </div>
     )
+  }
+}
+
+function _validateRoute(route) {
+  if (!isNaN(route)) { return route }
+  if (!route) { return undefined }
+  if (routes[route]) {
+    return route
+  } else {
+    return undefined
   }
 }

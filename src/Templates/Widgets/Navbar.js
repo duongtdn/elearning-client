@@ -17,9 +17,9 @@ export default class Sidebar extends Component {
   _renderInMediumDevice() {
     return (
       <div className="w3-sidebar w3-bar-block w3-black w3-border-grey w3-xlarge w3-hide-small" style={{width: '60px'}}>
-        <button className="w3-bar-item w3-button" onClick={e => this.props.navigate('courseOverview')}><i className="fa fa-home"/></button>
-        <button className="w3-bar-item w3-button" onClick={e => this.props.navigate('studyCentral')}><i className="fa fa-tv"/></button>
-        <button className="w3-bar-item w3-button" onClick={e => this.props.navigate('studyProgress')}><i className="fa fa-bar-chart"/></button>
+        <a href="#overview" className="w3-bar-item w3-button" onClick={e => this.props.navigate('overview')}><i className="fa fa-home"/></a>
+        <a href="#study" className="w3-bar-item w3-button" onClick={e => this.props.navigate('study')}><i className="fa fa-tv"/></a>
+        <a href="#progress" className="w3-bar-item w3-button" onClick={e => this.props.navigate('progress')}><i className="fa fa-bar-chart"/></a>
       </div>
     )
   }
@@ -27,10 +27,10 @@ export default class Sidebar extends Component {
     return (
       <div className="w3-bar w3-black w3-hide-medium w3-hide-large">
         <div className="w3-right">
-        <button className="w3-bar-item w3-button" onClick={e => this.props.navigate('courseOverview')}><i className="fa fa-home"/></button>
-        <button className="w3-bar-item w3-button" onClick={e => this.props.navigate('studyCentral')}><i className="fa fa-tv"/></button>
-        <button className="w3-bar-item w3-button" onClick={e => this.props.navigate('studyProgress')}><i className="fa fa-bar-chart"/></button>
-      </div>
+          <a href="#overview" className="w3-bar-item w3-button" onClick={e => this.props.navigate('overview')}><i className="fa fa-home"/></a>
+          <a href="#study" className="w3-bar-item w3-button" onClick={e => this.props.navigate('study')}><i className="fa fa-tv"/></a>
+          <a href="#progress" className="w3-bar-item w3-button" onClick={e => this.props.navigate('progress')}><i className="fa fa-bar-chart"/></a>
+        </div>
       </div>
     )
   }
