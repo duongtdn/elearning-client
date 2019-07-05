@@ -8,7 +8,7 @@ export default class LessonList extends Component {
   }
   render() {
     const lessons =  (this.props.topic && this.props.topic.lessons) || undefined
-    const progress = [true]
+    const progress = {l1: true, l2: true}
     return (
       <div>
         <h4 className="w3-white" > Lessons </h4>
@@ -23,7 +23,7 @@ export default class LessonList extends Component {
                     onClick={() => this.changeLesson(index)} >
 
                 <div className="w3-cell w3-cell-middle" style={{width:'40px'}}>
-                  <div className={`circle ${progress[index]? 'completed':''}`} style={{ zIndex }}/>
+                  <div className={`circle ${progress[lesson.id]? 'completed':''}`} style={{ zIndex }}/>
                 </div>
 
                 <div className={`w3-container w3-cell ${highlight}`}>

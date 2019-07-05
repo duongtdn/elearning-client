@@ -12,7 +12,7 @@ export default class TopicDropBox extends Component {
     const topics = content.topics
     const currentTopic = topics[this.props.currentTopicIndex]
     const parts = content.parts
-    const completion = [true, true] // temporary hardcoded now
+    const completion = {t1: true, t2: true} // temporary hardcoded now
     const drop = this.state.showDropdown ? 'w3-show' : 'w3-hide'
     return (
       <div className="w3-bar w3-border-grey" >
@@ -43,7 +43,7 @@ export default class TopicDropBox extends Component {
                               <div className="w3-text-blue-grey w3-small"> Topic {index+1} </div>
                               <div style={{whiteSpace: 'normal'}} > {topic.title} </div>
                             </div>
-                            <div className="w3-text-green" style={{display: `${completion[index]?'block':'none'}`, position: 'absolute', top: 0, right: 0}}>
+                            <div className="w3-text-green" style={{display: `${completion[topic.id]?'block':'none'}`, position: 'absolute', top: 0, right: 0}}>
                               <i className="fa fa-check" aria-hidden="true"></i>
                             </div>
                           </div>
