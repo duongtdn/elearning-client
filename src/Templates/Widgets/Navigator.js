@@ -2,6 +2,8 @@
 
 import React, { Component } from 'react'
 
+import media from 'media-query'
+
 import Header from './Header'
 
 export default class Navigator extends Component {
@@ -9,12 +11,11 @@ export default class Navigator extends Component {
     super(props)
   }
   render() {
-    return (
-      <div>
-        {this._renderInMediumDevice()}
-        {this._renderInSmallDevice()}
-      </div>
-    )
+    if (media.isSmall()) {
+      return this._renderInSmallDevice()
+    } else {
+      return this._renderInMediumDevice()
+    }
   }
   _renderPage(page) {
     return(
