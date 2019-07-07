@@ -36,14 +36,26 @@ export default class StudyCentral extends Component {
                       currentTopicIndex = {this.state.currentTopicIndex}
                       onSelectTopic = { index => { this.setState({currentTopicIndex: index}) } }
         />
-        <LessonPlayer lesson = {lesson}
-                      moveToPreviousLesson = {this.moveToPreviousLesson}
-                      moveToNextLesson = {this.moveToNextLesson}
-        />
-        <LessonList topic = {topic}
-                    currentIndex = {this.state.currentLessonIndex}
-                    onSelectLesson = { index => this.setState({currentLessonIndex: index}) }
-        />
+        <div className="row" style={{margin: '16px 0'}}>
+          <div className="w3-threequarter">
+            <LessonPlayer lesson = {lesson}
+                          moveToPreviousLesson = {this.moveToPreviousLesson}
+                          moveToNextLesson = {this.moveToNextLesson}
+            />
+            <div className="w3-hide-small w3-hide-large">
+              <LessonList topic = {topic}
+                          currentIndex = {this.state.currentLessonIndex}
+                          onSelectLesson = { index => this.setState({currentLessonIndex: index}) }
+              />
+            </div>
+          </div>
+          <div className="w3-quarter w3-container w3-hide-medium">
+            <LessonList topic = {topic}
+                        currentIndex = {this.state.currentLessonIndex}
+                        onSelectLesson = { index => this.setState({currentLessonIndex: index}) }
+            />
+          </div>
+        </div>
       </div>
     )
   }
