@@ -40,7 +40,8 @@ export default class AppShell extends Component {
         <Navigator  user = {this.props.user}
                     accountClient = {this.props.accountClient}
                     template = {this.props.template}
-                    route = {routes[this.state.activeRoute]}
+                    routes = {routes}
+                    activeRoute = {this.state.activeRoute}
                     content = {this.props.content}
         />
       </div>
