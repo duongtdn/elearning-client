@@ -35,18 +35,22 @@ export default class AppShell extends Component {
   render() {
     return (
       <div>
-        <Navbar  navigate = {activeRoute => this.setState({activeRoute})}
+        <Navbar  navigate = {route => this.navigate(route)}
         />
         <Navigator  user = {this.props.user}
                     accountClient = {this.props.accountClient}
                     template = {this.props.template}
                     routes = {routes}
                     activeRoute = {this.state.activeRoute}
-                    navigate = {activeRoute => this.setState({activeRoute})}
+                    navigate = {route => this.navigate(route)}
                     content = {this.props.content}
         />
       </div>
     )
+  }
+  navigate(route) {
+    setTimeout( _ => href.set(`#${route}`), 0)
+    this.setState({activeRoute: route})
   }
 }
 
