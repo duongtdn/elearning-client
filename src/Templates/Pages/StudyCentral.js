@@ -8,13 +8,13 @@ import TopicDropBox from '../Widgets/TopicDropBox'
 import LessonList from '../Widgets/LessonList'
 import LessonPlayer from '../Widgets/LessonPlayer'
 
-const bookmark = href.getBookmark()
-
 export default class StudyCentral extends Component {
   constructor(props) {
     super(props)
+    const bookmark = href.getBookmark()
+    const topicIndexFromBookmark = (isNaN(bookmark) || isNaN(parseInt(bookmark))) ? 0 : parseInt(bookmark-1)
     this.state = {
-      currentTopicIndex: isNaN(bookmark) ? 0 : parseInt(bookmark-1),
+      currentTopicIndex: (topicIndexFromBookmark < 0 || topicIndexFromBookmark >= props.content.topics.length) ? 0 : topicIndexFromBookmark,
       currentLessonIndex: 0
     }
   }

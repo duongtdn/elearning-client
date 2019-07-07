@@ -7,8 +7,11 @@ import Header from './Header'
 export default class Navigator extends Component {
   constructor(props) {
     super(props)
+    this.routes =[]
   }
   render() {
+    const activeRoute = this.props.activeRoute
+    if (this.routes.indexOf(activeRoute) === -1) { this.routes.push(activeRoute)}
     return (
       <div className="w3-cell-row" >
         <div className="w3-cell w3-hide-small" style={{width: '60px'}}/>
@@ -18,9 +21,9 @@ export default class Navigator extends Component {
                   template = {this.props.template}
           />
           <div>{
-            Object.keys(this.props.routes).map(route => {
+            this.routes.map(route => {
               const page = this.props.routes[route]
-              const display = this.props.activeRoute === route ? 'block' : 'none'
+              const display = activeRoute === route ? 'block' : 'none'
               return (
                 <div key={route} style={{ display }} >
                 {React.createElement(page, {content: this.props.content})}
