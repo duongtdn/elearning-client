@@ -11,14 +11,22 @@ import LessonPlayer from '../Widgets/LessonPlayer'
 export default class StudyCentral extends Component {
   constructor(props) {
     super(props)
+
     const bookmark = href.getBookmark()
     const topicIndexFromBookmark = (isNaN(bookmark) || isNaN(parseInt(bookmark))) ? 0 : parseInt(bookmark-1)
+
     this.state = {
       currentTopicIndex: (topicIndexFromBookmark < 0 || topicIndexFromBookmark >= props.content.topics.length) ? 0 : topicIndexFromBookmark,
       currentLessonIndex: 0
     }
+
+    const methods = ['moveToNextLesson', 'moveToPreviousLesson']
+    methods.forEach(method => this[method] = this[method].bind(this))
+
+    setTimeout( _ => href.set(`#${this.state.currentTopicIndex+1}`), 0)
   }
   render() {
+    href.set(`#${this.state.currentTopicIndex+1}`)
     const content = this.props.content
     const topic = content.topics[this.state.currentTopicIndex]
     const lesson = topic.lessons[this.state.currentLessonIndex]
@@ -29,8 +37,8 @@ export default class StudyCentral extends Component {
                       onSelectTopic = { index => { this.setState({currentTopicIndex: index}) } }
         />
         <LessonPlayer lesson = {lesson}
-                      moveToPreviousLesson = {() => {this.setState({currentLessonIndex: this.state.currentLessonIndex - 1})}}
-                      moveToNextLesson = {() => {this.setState({currentLessonIndex: this.state.currentLessonIndex + 1})}}
+                      moveToPreviousLesson = {this.moveToPreviousLesson}
+                      moveToNextLesson = {this.moveToNextLesson}
         />
         <LessonList topic = {topic}
                     currentIndex = {this.state.currentLessonIndex}
@@ -38,5 +46,34 @@ export default class StudyCentral extends Component {
         />
       </div>
     )
+  }
+  moveToNextLesson() {
+    const {currentTopicIndex, currentLessonIndex}  = {...this.state}
+    const topics = this.props.content.topics
+    const currentTopic = topics[currentTopicIndex]
+    if (currentLessonIndex >= currentTopic.lessons.length - 1) {
+      if (currentTopicIndex >= topics.length - 1) {
+        console.log('reach end of course')
+        this.props.navigate && this.props.navigate('progress')
+      } else {
+        this.setState({currentLessonIndex: 0, currentTopicIndex: currentTopicIndex + 1})
+      }
+    } else {
+      this.setState({currentLessonIndex: currentLessonIndex + 1})
+    }
+  }
+  moveToPreviousLesson() {
+    const {currentTopicIndex, currentLessonIndex}  = {...this.state}
+    const topics = this.props.content.topics
+    if (currentLessonIndex <= 0) {
+      if (currentTopicIndex <= 0) {
+        console.log('reach begin of course')
+      } else {
+        const prevTopic = topics[currentTopicIndex-1]
+        this.setState({currentLessonIndex: prevTopic.lessons.length-1, currentTopicIndex: currentTopicIndex - 1})
+      }
+    } else {
+      this.setState({currentLessonIndex: currentLessonIndex - 1})
+    }
   }
 }
