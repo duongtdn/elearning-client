@@ -42,6 +42,7 @@ export default class AppShell extends Component {
                     template = {this.props.template}
                     routes = {routes}
                     activeRoute = {this.state.activeRoute}
+                    navigate = {activeRoute => this.setState({activeRoute})}
                     content = {this.props.content}
         />
       </div>
