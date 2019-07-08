@@ -17,10 +17,11 @@ export default class StudyCentral extends Component {
 
     this.state = {
       currentTopicIndex: (topicIndexFromBookmark < 0 || topicIndexFromBookmark >= props.content.topics.length) ? 0 : topicIndexFromBookmark,
-      currentLessonIndex: 0
+      currentLessonIndex: 0,
+      currentSubLessonIndex: null
     }
 
-    const methods = ['moveToNextLesson', 'moveToPreviousLesson']
+    const methods = ['moveToNextLesson', 'moveToPreviousLesson', 'onLessonCompleted']
     methods.forEach(method => this[method] = this[method].bind(this))
 
     setTimeout( _ => href.set(`#${this.state.currentTopicIndex+1}`), 0)
@@ -29,7 +30,9 @@ export default class StudyCentral extends Component {
     href.set(`#${this.state.currentTopicIndex+1}`)
     const content = this.props.content
     const topic = content.topics[this.state.currentTopicIndex]
-    const lesson = topic.lessons[this.state.currentLessonIndex]
+    const lesson = this.state.currentSubLessonIndex === null ?
+                      topic.lessons[this.state.currentLessonIndex] :
+                      topic.lessons[this.state.currentLessonIndex].subLessons[this.state.currentSubLessonIndex]
     return (
       <div className="w3-container">
         <TopicDropBox content = {content}
@@ -41,6 +44,7 @@ export default class StudyCentral extends Component {
             <LessonPlayer lesson = {lesson}
                           moveToPreviousLesson = {this.moveToPreviousLesson}
                           moveToNextLesson = {this.moveToNextLesson}
+                          onLessonCompleted = {this.onLessonCompleted}
             />
             <div className="w3-hide-small w3-hide-large">
               <LessonList topic = {topic}
@@ -68,10 +72,10 @@ export default class StudyCentral extends Component {
         console.log('reach end of course')
         this.props.navigate && this.props.navigate('progress')
       } else {
-        this.setState({currentLessonIndex: 0, currentTopicIndex: currentTopicIndex + 1})
+        this.setState({currentLessonIndex: 0, currentSubLessonIndex: null, currentTopicIndex: currentTopicIndex + 1})
       }
     } else {
-      this.setState({currentLessonIndex: currentLessonIndex + 1})
+      this.setState({currentLessonIndex: currentLessonIndex + 1, currentSubLessonIndex: null})
     }
   }
   moveToPreviousLesson() {
@@ -82,10 +86,30 @@ export default class StudyCentral extends Component {
         console.log('reach begin of course')
       } else {
         const prevTopic = topics[currentTopicIndex-1]
-        this.setState({currentLessonIndex: prevTopic.lessons.length-1, currentTopicIndex: currentTopicIndex - 1})
+        this.setState({currentLessonIndex: prevTopic.lessons.length-1, currentSubLessonIndex: null,currentTopicIndex: currentTopicIndex - 1})
       }
     } else {
-      this.setState({currentLessonIndex: currentLessonIndex - 1})
+      this.setState({currentLessonIndex: currentLessonIndex - 1, currentSubLessonIndex: null})
+    }
+  }
+  onLessonCompleted(id, evt) {
+    console.log(`Completed Lesson ${id}`)
+    const content = this.props.content
+    const topic = content.topics[this.state.currentTopicIndex]
+    const lesson = topic.lessons[this.state.currentLessonIndex]
+    if (!lesson.subLessons) {
+      // move to next
+      this.moveToNextLesson()
+      return
+    }
+    const nextSubLessonIndex = (evt && evt.next) ?
+                                  lesson.subLessons.findIndex(l => l.id === evt.next):
+                                  this.state.currentSubLessonIndex === null ? 0 : this.state.currentSubLessonIndex + 1
+    if (lesson.subLessons[nextSubLessonIndex]) {
+      // load sub lesson
+      this.setState({ currentSubLessonIndex:  nextSubLessonIndex})
+    } else {
+      this.moveToNextLesson()
     }
   }
 }

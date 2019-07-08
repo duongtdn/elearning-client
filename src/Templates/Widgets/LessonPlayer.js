@@ -17,7 +17,7 @@ export default class LessonPlayer extends Component {
       YoutubePlayerReactPlugin,
     ]
 
-    const methods = ['onContentLoaded', 'onContentCompleted', 'onResize']
+    const methods = ['onContentLoaded', 'onContentFinished', 'onResize']
     methods.forEach(method => this[method] = this[method].bind(this))
   }
 
@@ -27,7 +27,7 @@ export default class LessonPlayer extends Component {
         <ContentPresenter players = {this.players}
                           content = {this.props.lesson}
                           onContentLoaded = {this.onContentLoaded}
-                          onContentFinished = {() => this.onContentCompleted(this.props.lesson.id)}
+                          onContentFinished = {(e) => this.onContentFinished(this.props.lesson.id, e)}
                           onError = {err => console.log(err)}
                           onResize = {this.onResize}
         />
@@ -50,9 +50,8 @@ export default class LessonPlayer extends Component {
     this.setState({ height : height + 'px'})
   }
 
-  onContentCompleted(id) {
-    console.log(`Completed Lesson ${id}`)
-    this.props.onCompletedContent && this.props.onCompletedContent(contentId)
+  onContentFinished(id, e) {
+    this.props.onLessonCompleted && this.props.onLessonCompleted(id, e)
   }
 
 }
