@@ -44,6 +44,8 @@ export default class AppShell extends Component {
                     activeRoute = {this.state.activeRoute}
                     navigate = {route => this.navigate(route)}
                     content = {this.props.content}
+                    progress = {this.props.progress}
+                    updateProgress = {this.props.updateProgress}
         />
       </div>
     )

@@ -26,7 +26,12 @@ export default class Navigator extends Component {
               const display = activeRoute === route ? 'block' : 'none'
               return (
                 <div key={route} style={{ display }} >
-                  {React.createElement(page, {content: this.props.content, navigate: this.props.navigate})}
+                  { React.createElement( page, {
+                      content: this.props.content,
+                      progress: this.props.progress,
+                      updateProgress: this.props.updateProgress,
+                      navigate: this.props.navigate
+                  }) }
                 </div>
               )
             })

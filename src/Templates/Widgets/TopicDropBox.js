@@ -12,7 +12,7 @@ export default class TopicDropBox extends Component {
     const topics = content.topics
     const currentTopic = topics[this.props.currentTopicIndex]
     const parts = content.parts
-    const completion = {t1: true, t2: true} // temporary hardcoded now
+    const completion = this._findCompletedTopics()
     const drop = this.state.showDropdown ? 'w3-show' : 'w3-hide'
     return (
       <div className="w3-bar w3-border-grey" >
@@ -63,5 +63,16 @@ export default class TopicDropBox extends Component {
   changeTopic(index) {
     this.props.onSelectTopic && this.props.onSelectTopic(index)
     this.setState({ showDropdown: false })
+  }
+  _findCompletedTopics() {
+    const progress = this.props.progress
+    const content = this.props.content;
+    const topics = content.topics
+    const completed = {}
+    for (let t in progress) {
+      const topic = topics.find(_t => _t.id === t)
+      completed[t] = topic.lessons.every(lesson => progress[t][lesson.id] === true)
+    }
+    return completed
   }
 }

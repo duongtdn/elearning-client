@@ -38,6 +38,7 @@ export default class StudyCentral extends Component {
         <TopicDropBox content = {content}
                       currentTopicIndex = {this.state.currentTopicIndex}
                       onSelectTopic = { index => { this.setState({currentTopicIndex: index}) } }
+                      progress = {this.props.progress}
         />
         <div className="row" style={{margin: '16px 0'}}>
           <div className="w3-threequarter">
@@ -50,6 +51,7 @@ export default class StudyCentral extends Component {
               <LessonList topic = {topic}
                           currentIndex = {this.state.currentLessonIndex}
                           onSelectLesson = { index => this.setState({currentLessonIndex: index}) }
+                          progress = {this.props.progress}
               />
             </div>
           </div>
@@ -57,6 +59,7 @@ export default class StudyCentral extends Component {
             <LessonList topic = {topic}
                         currentIndex = {this.state.currentLessonIndex}
                         onSelectLesson = { index => this.setState({currentLessonIndex: index}) }
+                        progress = {this.props.progress}
             />
           </div>
         </div>
@@ -98,8 +101,7 @@ export default class StudyCentral extends Component {
     const topic = content.topics[this.state.currentTopicIndex]
     const lesson = topic.lessons[this.state.currentLessonIndex]
     if (!lesson.subLessons) {
-      // move to next
-      this.moveToNextLesson()
+      this._completeAndMoveToNextLesson()
       return
     }
     const nextSubLessonIndex = (evt && evt.next) ?
@@ -109,7 +111,20 @@ export default class StudyCentral extends Component {
       // load sub lesson
       this.setState({ currentSubLessonIndex:  nextSubLessonIndex})
     } else {
-      this.moveToNextLesson()
+      this._completeAndMoveToNextLesson()
     }
+  }
+  _completeAndMoveToNextLesson() {
+    const content = this.props.content
+    const topic = content.topics[this.state.currentTopicIndex]
+    const lesson = topic.lessons[this.state.currentLessonIndex]
+
+    const progress = {}
+    progress[topic.id] = {}
+    progress[topic.id][lesson.id] = true
+
+    this.props.updateProgress && this.props.updateProgress(progress)
+
+    this.moveToNextLesson()
   }
 }
