@@ -13,7 +13,10 @@ export default class StudyCentral extends Component {
     super(props)
 
     const bookmark = href.getBookmark()
-    const topicIndexFromBookmark = (isNaN(bookmark) || isNaN(parseInt(bookmark))) ? 0 : parseInt(bookmark-1)
+    const lastTopicBookmarked = localStorage.getItem(href.key.bookmark) || undefined
+    const topicIndexFromBookmark = !(isNaN(bookmark) || isNaN(parseInt(bookmark))) ? parseInt(bookmark-1)
+                                      : !(isNaN(lastTopicBookmarked) || isNaN(parseInt(lastTopicBookmarked))) ? parseInt(lastTopicBookmarked-1)
+                                      : 0
 
     this.state = {
       currentTopicIndex: (topicIndexFromBookmark < 0 || topicIndexFromBookmark >= props.content.topics.length) ? 0 : topicIndexFromBookmark,
@@ -24,10 +27,10 @@ export default class StudyCentral extends Component {
     const methods = ['moveToNextLesson', 'moveToPreviousLesson', 'onLessonCompleted']
     methods.forEach(method => this[method] = this[method].bind(this))
 
-    setTimeout( _ => href.set(`#${this.state.currentTopicIndex+1}`), 0)
+    setTimeout( _ => this._setBookmark(), 0)
   }
   render() {
-    href.set(`#${this.state.currentTopicIndex+1}`)
+    this._setBookmark()
     const content = this.props.content
     const topic = content.topics[this.state.currentTopicIndex]
     const lesson = this.state.currentSubLessonIndex === null ?
@@ -126,5 +129,9 @@ export default class StudyCentral extends Component {
     this.props.updateProgress && this.props.updateProgress(progress)
 
     this.moveToNextLesson()
+  }
+  _setBookmark() {
+    href.set(`#${this.state.currentTopicIndex+1}`)
+    localStorage.setItem(href.key.bookmark, this.state.currentTopicIndex+1)
   }
 }

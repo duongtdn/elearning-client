@@ -18,13 +18,22 @@ const routes = {
   progress: StudyProgress
 }
 
+href.observer(evt => {
+  const bookmark = href.getBookmark()
+  if (bookmark === 'study') {
+    const lastTopicBookmarked = localStorage.getItem(href.key.bookmark) || undefined
+    const newBookmark = !(isNaN(lastTopicBookmarked) || isNaN(parseInt(lastTopicBookmarked))) ? parseInt(lastTopicBookmarked) : 1
+    href.set(`#${newBookmark}`)
+  }
+})
+
 export default class AppShell extends Component {
   constructor(props) {
     super(props)
     const bookmark = _validateRoute(href.getBookmark())
-    const storedActiveRoute = _validateRoute(localStorage.getItem(CONST.KEY.STORAGE.activeRoute))
+    const lastTopicBookmarked = _validateRoute(localStorage.getItem(href.key.bookmark) || undefined)
     this.state = {
-      activeRoute: storedActiveRoute || ((bookmark && (isNaN(bookmark)? bookmark : 'study')) || 'overview')
+      activeRoute: bookmark || (lastTopicBookmarked || 'overview')
     }
     !bookmark && href.set(`#${this.state.activeRoute}`)
   }
@@ -57,7 +66,7 @@ export default class AppShell extends Component {
 }
 
 function _validateRoute(route) {
-  if (!isNaN(route)) { return route }
+  if (!isNaN(route)) { return 'study' }
   if (!route) { return undefined }
   if (routes[route]) {
     return route
