@@ -27,6 +27,7 @@ export default class Navigator extends Component {
               return (
                 <div key={route} style={{ display }} >
                   { React.createElement( page, {
+                      user: this.props.user,
                       content: this.props.content,
                       progress: this.props.progress,
                       updateProgress: this.props.updateProgress,
