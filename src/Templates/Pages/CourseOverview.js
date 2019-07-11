@@ -85,9 +85,9 @@ export default class CourseOverview extends Component {
               { content.materials.map( (material, index) => (
                 <li key={index} className="w3-display-container">
                   {material.title}
-                  <span className="w3-button w3-display-right w3-text-blue w3-large">
+                  <a href={material.url} target="_blank" className="w3-button w3-display-right w3-text-blue w3-large">
                     <i className={`fa fa-${material.downloadable?'cloud-download':'external-link'}`} />
-                  </span>
+                  </a>
                 </li>
               ))}
             </ul>
