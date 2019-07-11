@@ -47,7 +47,7 @@ export default class CourseOverview extends Component {
           <Title label="Instructor Note" onClick={show => this.setState({ showInstructorNote: show })} />
           <div className="w3-panel w3-leftbar w3-sand w3-large note" style={{display: this.state.showInstructorNote? 'block': 'none'}}>
             <p> Dear {user.profile.displayName} </p>
-            <p style={{maxWidth: '1200px'}} dangerouslySetInnerHTML={createMarkup(content.note)} />
+            <div dangerouslySetInnerHTML={createMarkup(content.note)} />
           </div>
           <div className="w3-panel w3-leftbar w3-sand note w3-text-grey" style={{display: !this.state.showInstructorNote? 'block': 'none'}}>
             <p> . . . </p>
