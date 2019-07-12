@@ -44,6 +44,12 @@ export default class CourseOverview extends Component {
         <hr />
 
         <div>
+          <a href="#study" className="w3-bar-item w3-button w3-blue" onClick={e => this.props.navigate('study')}>
+            <i className="fa fa-tv"/> Begin Studying
+          </a>
+        </div>
+
+        <div>
           <Title label="Instructor Note" onClick={show => this.setState({ showInstructorNote: show })} />
           <div className="w3-panel w3-leftbar w3-sand w3-large note" style={{display: this.state.showInstructorNote? 'block': 'none'}}>
             <p> Dear {user.profile.displayName} </p>
