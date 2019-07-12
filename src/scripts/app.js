@@ -19,7 +19,7 @@ import AppData from '../Templates/AppData'
 
 render(
   <UserProvider accountClient = {acc} >
-    <AppData urlBasePath = {env.urlBasePath} template = {env.template} />
+    <AppData env = {env} />
   </UserProvider>,
   document.getElementById('root')
 )

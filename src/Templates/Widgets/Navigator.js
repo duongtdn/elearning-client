@@ -18,7 +18,7 @@ export default class Navigator extends Component {
         <div className="w3-cell" >
           <Header user = {this.props.user}
                   accountClient = {this.props.accountClient}
-                  template = {this.props.template}
+                  env = {this.props.env}
           />
           <div>{
             this.routes.map(route => {
@@ -29,10 +29,11 @@ export default class Navigator extends Component {
                   { React.createElement( page, {
                       user: this.props.user,
                       content: this.props.content,
+                      tests: this.props.tests,
                       progress: this.props.progress,
                       updateProgress: this.props.updateProgress,
                       navigate: this.props.navigate,
-                      template: this.props.template
+                      env: this.props.env
                   }) }
                 </div>
               )

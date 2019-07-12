@@ -28,9 +28,9 @@ class UserSnipet extends Component {
     const user = this.props.user
     if (user.profile.picture) { return user.profile.picture }
     if (user.profile.gender === 'female') {
-      return this.props.template.avata.female
+      return this.props.env.template.avata.female
     } else {
-      return this.props.template.avata.male
+      return this.props.env.template.avata.male
     }
   }
 }
@@ -50,7 +50,7 @@ export default class Header extends Component {
             this.props.user?
               <UserSnipet user={this.props.user}
                           accountClient={this.props.accountClient}
-                          template = {this.props.template}
+                          env = {this.props.env}
               />
             : null
           }

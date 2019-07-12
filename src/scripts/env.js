@@ -10,6 +10,8 @@ export default {
   app: 'dev',
   urlBasePath: '/api',
   urlQuizzesBasePath: '/api/quizzes',
+  urlExamBasePath: '/api/result',
+  urlTestResultBasePath: '/api/result',
   template: {
     avata: {
       male: 'https://i1.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?resize=256%2C256&quality=100',

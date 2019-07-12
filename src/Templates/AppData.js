@@ -71,14 +71,14 @@ const progress = {
 export default class AppData extends Component {
   constructor(props) {
     super(props)
-    progress.config({urlBasePath: this.props.urlBasePath || ''})
+    progress.config({urlBasePath: this.props.env.urlBasePath || ''})
     this.state = {
       loading: true,
       err: null,
       content: null,
       progress: progress.get(progress => this.setState({progress}))
     }
-    this.loadContent().then( content => this.setState({loading: false, content})).catch(err => this.setState({loading: false, err}))
+    this.loadContent().then( ({content, tests}) => this.setState({loading: false, content, tests})).catch(err => this.setState({loading: false, err}))
   }
   render() {
     if (!query || !query.c) {
@@ -97,22 +97,23 @@ export default class AppData extends Component {
     return (
       <AppShell user = {this.props.user}
                 accountClient = {this.props.accountClient}
-                template = {this.props.template}
+                env = {this.props.env}
                 content = {this.state.content}
+                tests = {this.state.tests}
                 progress = {this.state.progress}
                 updateProgress = { p => this.setState({ progress: progress.update(p) }) }
       />
     )
   }
   loadContent() {
-    const urlBasePath = this.props.urlBasePath || ''
+    const urlBasePath = this.props.env.urlBasePath || ''
     return new Promise((resolve, reject) => {
       xhttp.get(`${urlBasePath}/content?c=${query.c}`,
         { authen: true },
         (status, response) => {
           if (status === 200) {
-            const content = JSON.parse(response)
-            resolve(content)
+            const {content, tests} = JSON.parse(response)
+            resolve({content, tests})
           } else {
             reject(status)
           }

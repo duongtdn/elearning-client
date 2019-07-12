@@ -48,11 +48,12 @@ export default class AppShell extends Component {
         />
         <Navigator  user = {this.props.user}
                     accountClient = {this.props.accountClient}
-                    template = {this.props.template}
+                    env = {this.props.env}
                     routes = {routes}
                     activeRoute = {this.state.activeRoute}
                     navigate = {route => this.navigate(route)}
                     content = {this.props.content}
+                    tests = {this.props.tests}
                     progress = {this.props.progress}
                     updateProgress = {this.props.updateProgress}
         />

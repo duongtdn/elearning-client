@@ -9,7 +9,7 @@ export default class StudyProgress extends Component {
     super(props)
     this.state = {
       showDetailProgress: false,
-      showDetailTestResults: false,
+      showDetailTestResults: true,
     }
   }
   render() {
@@ -38,23 +38,23 @@ export default class StudyProgress extends Component {
           />
           <div className="" style={{display: this.state.showDetailProgress? 'block': 'none'}}>
             { topics.map( (topic, index) => {
-              const completion = this._calculateTopicCompletion(topic)
-              return (
-                <div className="w3-cell-row w3-border-bottom" key={topic.id} style={{margin: '8px 0px', padding: '8px 0px'}}>
-                  <div className="w3-container w3-cell w3-mobile">
-                    <span className="w3-small w3-text-grey" > Topic {index+1} </span> <br />
-                    <span className="w3-text-blue-grey" > {topic.title} </span>
-                  </div>
-                  <div className="w3-container w3-cell w3-cell-middle w3-mobile" style={{width: '50%'}}>
-                    <div className="w3-pale-green">
-                      <div className="w3-container w3-green w3-center" style={{height: '24px', width: completion}}> {completion} </div>
+                const completion = this._calculateTopicCompletion(topic)
+                return (
+                  <div className="w3-cell-row w3-border-bottom" key={topic.id} style={{margin: '8px 0px', padding: '8px 0px'}}>
+                    <div className="w3-container w3-cell w3-mobile">
+                      <span className="w3-small w3-text-grey" > Topic {index+1} </span> <br />
+                      <span className="w3-text-blue-grey" > {topic.title} </span>
+                    </div>
+                    <div className="w3-container w3-cell w3-cell-middle w3-mobile" style={{width: '50%'}}>
+                      <div className="w3-pale-green">
+                        <div className="w3-container w3-green w3-center" style={{height: '24px', width: completion}}> {completion} </div>
+                      </div>
                     </div>
                   </div>
-                </div>
               )
-            })}
+            }) }
           </div>
-          <div className="w3-text-grey" style={{display: !this.state.showDetailProgress? 'block': 'none'}}>
+          <div className="w3-text-grey w3-small" style={{display: !this.state.showDetailProgress? 'block': 'none'}}>
             <p style={{fontStyle: 'italic'}}> Detailed progress... </p>
           </div>
         </div>
@@ -66,7 +66,41 @@ export default class StudyProgress extends Component {
                 onClick={show => this.setState({showDetailTestResults: show})} init='down'
         />
         <div>
-          <div className="w3-text-grey" style={{display: !this.state.showDetailTestResults? 'block': 'none'}}>
+          <div className="" style={{display: this.state.showDetailTestResults? 'block': 'none'}}>
+            <table className="w3-table">
+              <tbody>{
+                this.props.tests.map( (test, index) => {
+                  const score = (test.result && test.result.score) || null
+                  const status = (test.result && test.result.status) || null;
+                  return (
+                    <tr className="w3-border-bottom" key={index} >
+                      <td className="w3-container">
+                        <span className="w3-text-blue-grey w3-small" style={{fontStyle: 'italic'}} >{test.title} </span> <br />
+                        <span className="w3-text-grey " > {test.description} </span> <br />
+                        {/* <button className="w3-button w3-blue w3-small"> Take Test </button> */}
+                      </td>
+                      <td className="w3-container" style={{ verticalAlign: 'middle'}}>
+                        {
+                          status ?
+                            <span className={`w3-text-${status === 'passed' ? 'green' : 'red'}`} >
+                              {status.toUpperCase()}
+                              <a href={`${this.props.env.urlExamBasePath}/result?r=${test.resultId}`} target="_blank" style={{textDecoration: 'none'}}> <i className="fa fa-info-circle" style={{fontWeight: 'lighter'}} /></a> <br />
+                              <span className="w3-text-blue-grey w3-small " > {score}/{test.passScore} </span>
+                            </span>
+                          :
+                          <a href={`${this.props.env.urlExamBasePath}/exam?t=${test.testId}`} className="w3-button w3-blue w3-small" target="_blank"> Take Test </a>
+                        }
+                      </td>
+
+                    </tr>
+                  )
+                })
+              }</tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div className="w3-text-grey w3-small" style={{display: !this.state.showDetailTestResults? 'block': 'none'}}>
             <p style={{fontStyle: 'italic'}}> Detailed results... </p>
           </div>
         </div>
@@ -128,9 +162,9 @@ export default class StudyProgress extends Component {
     const user = this.props.user
     if (user.profile.picture) { return user.profile.picture }
     if (user.profile.gender === 'female') {
-      return this.props.template.avata.female
+      return this.props.env.template.avata.female
     } else {
-      return this.props.template.avata.male
+      return this.props.env.template.avata.male
     }
   }
 
