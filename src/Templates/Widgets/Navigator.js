@@ -31,7 +31,8 @@ export default class Navigator extends Component {
                       content: this.props.content,
                       progress: this.props.progress,
                       updateProgress: this.props.updateProgress,
-                      navigate: this.props.navigate
+                      navigate: this.props.navigate,
+                      template: this.props.template
                   }) }
                 </div>
               )

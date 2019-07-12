@@ -27,7 +27,7 @@ export default class CourseOverview extends Component {
           </a>
         </div>
 
-        <div>
+        <div style={{marginTop: '32px'}}>
           <Title label="Instructor Note" onClick={show => this.setState({ showInstructorNote: show })} />
           <div className="w3-panel w3-leftbar w3-sand w3-large note" style={{display: this.state.showInstructorNote? 'block': 'none'}}>
             <p> Dear {user.profile.displayName} </p>
@@ -38,7 +38,7 @@ export default class CourseOverview extends Component {
           </div>
         </div>
 
-        <div>
+        <div style={{marginTop: '32px'}}>
           <Title label="Content" onClick={show => this.setState({ showTableOfContent: show })} />
           <div style={{display: this.state.showTableOfContent? 'block': 'none'}}>
             { content.parts.map( (part, index) => {
@@ -62,7 +62,7 @@ export default class CourseOverview extends Component {
           </div>
         </div>
 
-        <div>
+        <div style={{marginTop: '32px'}}>
           <Title label="Materials" onClick={show => this.setState({ showMaterials: show })} />
           <div className="" style={{display: this.state.showMaterials? 'block': 'none'}}>
             <ul className="w3-ul">
