@@ -8,7 +8,7 @@ export default class StudyProgress extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      showDetailProgress: false,
+      showDetailProgress: true,
       showDetailTestResults: true,
     }
   }
@@ -34,7 +34,7 @@ export default class StudyProgress extends Component {
         <h3> Study Progress </h3>
         <div>
           <Title  label={`Completion: ${this._calculateTotalCompletion()}`}
-                  onClick={show => this.setState({showDetailProgress: show})} init='down'
+                  onClick={show => this.setState({showDetailProgress: show})}
           />
           <div className="" style={{display: this.state.showDetailProgress? 'block': 'none'}}>
             { topics.map( (topic, index) => {
@@ -63,7 +63,7 @@ export default class StudyProgress extends Component {
 
         <h3> Test Results </h3>
         <Title  label={`Completion: ${this._calculateTestsCompletion()}`}
-                onClick={show => this.setState({showDetailTestResults: show})} init='down'
+                onClick={show => this.setState({showDetailTestResults: show})}
         />
         <div>
           <div className="" style={{display: this.state.showDetailTestResults? 'block': 'none'}}>

@@ -81,6 +81,7 @@ export default class AppData extends Component {
     this.loadContent().then( ({content, tests}) => this.setState({loading: false, content, tests})).catch(err => this.setState({loading: false, err}))
   }
   render() {
+    console.log('AppData.render')
     if (!query || !query.c) {
       return (<Error code = '400' message = 'Invalid query' />)
     }
