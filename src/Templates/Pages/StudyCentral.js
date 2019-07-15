@@ -49,6 +49,7 @@ export default class StudyCentral extends Component {
                           moveToPreviousLesson = {this.moveToPreviousLesson}
                           moveToNextLesson = {this.moveToNextLesson}
                           onLessonCompleted = {this.onLessonCompleted}
+                          env = {this.props.env}
             />
             <div className="w3-hide-small w3-hide-large">
               <LessonList topic = {topic}

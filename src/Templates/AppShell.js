@@ -42,6 +42,7 @@ export default class AppShell extends Component {
     console.log(this.props.content)
   }
   render() {
+    console.log('AppShell.render')
     return (
       <div>
         <Navbar  navigate = {route => this.navigate(route)}

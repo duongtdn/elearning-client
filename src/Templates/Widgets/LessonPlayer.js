@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 
 import { ContentPresenter } from 'content-presenter'
 import { YoutubePlayerReactPlugin } from 'youtube-player-plugin'
+import { QuizPlayerReactPlugin } from 'quiz-player-plugin'
 
 export default class LessonPlayer extends Component {
   constructor(props) {
@@ -15,7 +16,10 @@ export default class LessonPlayer extends Component {
 
     this.players = [
       YoutubePlayerReactPlugin,
+      QuizPlayerReactPlugin,
     ]
+
+    QuizPlayerReactPlugin.setPlayerVars({ urlBasePath: this.props.env.urlQuizzesBasePath })
 
     const methods = ['onContentLoaded', 'onContentFinished', 'onResize']
     methods.forEach(method => this[method] = this[method].bind(this))
