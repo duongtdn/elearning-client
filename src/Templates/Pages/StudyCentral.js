@@ -101,16 +101,25 @@ export default class StudyCentral extends Component {
   }
   onLessonCompleted(id, evt) {
     console.log(`Completed Lesson ${id}`)
+
     const content = this.props.content
     const topic = content.topics[this.state.currentTopicIndex]
     const lesson = topic.lessons[this.state.currentLessonIndex]
+
     if (!lesson.subLessons) {
       this._completeAndMoveToNextLesson()
       return
     }
-    const nextSubLessonIndex = (evt && evt.next) ?
-                                  lesson.subLessons.findIndex(l => l.id === evt.next):
-                                  this.state.currentSubLessonIndex === null ? 0 : this.state.currentSubLessonIndex + 1
+
+    let nextSubLessonIndex = this.state.currentSubLessonIndex === null ? 0 : this.state.currentSubLessonIndex + 1
+    if (lesson.subLessons[this.state.currentSubLessonIndex] && lesson.subLessons[this.state.currentSubLessonIndex].skip) {
+      nextSubLessonIndex = nextSubLessonIndex + parseInt(lesson.subLessons[this.state.currentSubLessonIndex].skip)
+    }
+    if (evt) {
+      if (evt.skip) { nextSubLessonIndex = nextSubLessonIndex + parseInt(evt.skip) }
+      if (evt.next) { nextSubLessonIndex = lesson.subLessons.findIndex(l => l.id === evt.next) }
+    }
+
     if (lesson.subLessons[nextSubLessonIndex]) {
       // load sub lesson
       this.setState({ currentSubLessonIndex:  nextSubLessonIndex})
