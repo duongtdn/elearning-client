@@ -30,16 +30,16 @@ export default class TopicDropBox extends Component {
           {
             parts.map((part,index) => (
               <div key={index} style={{display: 'inline-block', width: '100%', margin: '16px 0'}} >
-                <div className='w3-container w3-text-blue' >
+                <div className='w3-container w3-text-blue w3-border-bottom' >
                   Part {index}: {part.title}
                 </div>
                 {
                   topics.map((topic,index) => {
                     if (topic.part === part.id) {
                       return (
-                        <a key = {index} href={`#${index+1}`} className="w3-button w3-border-bottom" style={{width: '100%', textAlign: 'left'}} onClick={() => this.changeTopic(index)}> 
+                        <a key = {index} href={`#${index+1}`} className="w3-button" style={{width: '100%', textAlign: 'left'}} onClick={() => this.changeTopic(index)}> 
                           <div style={{position: 'relative'}}>
-                            <div style={{fontStyle: 'italic'}}>
+                            <div style={{fontStyle: 'normal'}}>
                               <div className="w3-text-blue-grey w3-small"> Topic {index+1} </div>
                               <div style={{whiteSpace: 'normal'}} > {topic.title} </div>
                             </div>

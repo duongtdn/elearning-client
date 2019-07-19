@@ -16,9 +16,9 @@ export default class LessonList extends Component {
         <div style={{overflow: 'hidden'}}>{
           lessons.map( (lesson,index) => {
             const zIndex = 100 - index
-            const highlight = this.props.currentIndex === index ? 'w3-text-blue' : ''
+            const highlight = this.props.currentIndex === index ? 'w3-text-blue w3-pale-blue' : ''
             return (
-              <div  className="w3-cell-row w3-hover-pale-blue" style={{width:'100%', cursor: 'pointer'}}
+              <div  className={`w3-cell-row ${highlight} w3-hover-pale-blue`} style={{width:'100%', cursor: 'pointer'}}
                     key={index}
                     onClick={() => this.changeLesson(index)} >
 
@@ -27,7 +27,7 @@ export default class LessonList extends Component {
                 </div>
 
                 <div className={`w3-container w3-cell ${highlight}`}>
-                  <p> {lesson.title} </p>
+                  <p style={{fontStyle: progress[lesson.id]? 'italic': 'normal'}}> {lesson.title} </p>
                 </div>
               </div>
             )
