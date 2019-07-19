@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import { ContentPresenter } from 'content-presenter'
 import { YoutubePlayerReactPlugin } from 'youtube-player-plugin'
 import { QuizPlayerReactPlugin } from 'quiz-player-plugin'
+import { PromptPlayerReactPlugin } from 'prompt-player-plugin'
 
 export default class LessonPlayer extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ export default class LessonPlayer extends Component {
     this.players = [
       YoutubePlayerReactPlugin,
       QuizPlayerReactPlugin,
+      PromptPlayerReactPlugin,
     ]
 
     QuizPlayerReactPlugin.setPlayerVars({ urlBasePath: this.props.env.urlQuizzesBasePath })

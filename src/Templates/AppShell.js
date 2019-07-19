@@ -38,7 +38,6 @@ export default class AppShell extends Component {
     !bookmark && href.set(`#${this.state.activeRoute}`)
   }
   componentDidMount() {
-    console.log(this.props.user)
     console.log(this.props.content)
   }
   render() {

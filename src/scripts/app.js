@@ -13,7 +13,11 @@ const acc = new AccountClient({
   app: env.app,
   baseurl: env.urlAccount
 })
-acc.sso()
+acc.sso( (status, user) => {
+  console.log('SSO finished')
+  console.log(status)
+  console.log(user)
+})
 
 import AppData from '../Templates/AppData'
 

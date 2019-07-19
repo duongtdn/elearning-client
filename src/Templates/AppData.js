@@ -82,6 +82,7 @@ export default class AppData extends Component {
   }
   render() {
     console.log('AppData.render')
+    console.log(this.props.user)
     if (!query || !query.c) {
       return (<Error code = '400' message = 'Invalid query' />)
     }

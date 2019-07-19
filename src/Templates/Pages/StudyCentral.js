@@ -54,7 +54,7 @@ export default class StudyCentral extends Component {
             <div className="w3-hide-small w3-hide-large">
               <LessonList topic = {topic}
                           currentIndex = {this.state.currentLessonIndex}
-                          onSelectLesson = { index => this.setState({currentLessonIndex: index}) }
+                          onSelectLesson = { index => this.setState({currentLessonIndex: index, currentSubLessonIndex: null}) }
                           progress = {this.props.progress}
               />
             </div>
@@ -62,7 +62,7 @@ export default class StudyCentral extends Component {
           <div className="w3-quarter w3-container w3-hide-medium">
             <LessonList topic = {topic}
                         currentIndex = {this.state.currentLessonIndex}
-                        onSelectLesson = { index => this.setState({currentLessonIndex: index}) }
+                        onSelectLesson = { index => this.setState({currentLessonIndex: index, currentSubLessonIndex: null}) }
                         progress = {this.props.progress}
             />
           </div>
