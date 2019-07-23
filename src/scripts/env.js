@@ -10,7 +10,7 @@ export default {
   app: 'dev',
   urlBasePath: '/api',
   urlQuizzesBasePath: '/api/quizzes',
-  urlExamBasePath: '/api/result',
+  urlExamBasePath: '/api/exam',
   urlTestResultBasePath: '/api/result',
   template: {
     avata: {
