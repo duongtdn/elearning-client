@@ -17,7 +17,7 @@ export default class TopicDropBox extends Component {
     return (
       <div className="w3-bar w3-border-grey" >
 
-        <a href="#" className="w3-bar-item w3-button w3-border-left" onClick={e => {this.setState({showDropdown: !this.state.showDropdown})}}> 
+        <a className="w3-bar-item w3-button w3-border-left w3-text-dark-grey bold" onClick={e => {this.setState({showDropdown: !this.state.showDropdown})}}>
           <span > Topic {this.props.currentTopicIndex+1} </span> &nbsp;
           <span className="w3-hide-small">
             <i className="fa fa-angle-right"></i>
@@ -26,25 +26,25 @@ export default class TopicDropBox extends Component {
           &nbsp; <i className={`fa ${this.state.showDropdown?'fa-caret-up':'fa-caret-down'}`}></i>
         </a>
 
-        <div className={`w3-light-grey ${drop}`} style={{padding: 0, width: '100%', zIndex: 999}}>
+        <div className={`w3-white ${drop} w3-border-left w3-border-bottom`} style={{padding: 0, width: '100%', zIndex: 999}}>
           {
             parts.map((part,index) => (
-              <div key={index} style={{display: 'inline-block', width: '100%', margin: '16px 0'}} >
-                <div className='w3-container w3-text-blue w3-border-bottom' >
+              <div key={index} style={{display: 'inline-block', width: '100%', margin: '8px 0'}} >
+                <div className='w3-container w3-text-blue-grey w3-small bold' >
                   Part {index}: {part.title}
                 </div>
                 {
                   topics.map((topic,index) => {
                     if (topic.part === part.id) {
                       return (
-                        <a key = {index} href={`#${index+1}`} className="w3-button" style={{width: '100%', textAlign: 'left'}} onClick={() => this.changeTopic(index)}> 
-                          <div style={{position: 'relative'}}>
-                            <div style={{fontStyle: 'normal'}}>
-                              <div className="w3-text-blue-grey w3-small"> Topic {index+1} </div>
-                              <div style={{whiteSpace: 'normal'}} > {topic.title} </div>
+                        <a key = {index} href={`#${index+1}`} className="w3-button" style={{width: '100%', textAlign: 'left'}} onClick={() => this.changeTopic(index)}>
+                          <div className="w3-cell-row" style={{position: 'relative'}}>
+                            <div className="w3-cell w3-cell-middle" style={{width: '30px'}}>
+                              <i className="w3-text-green fas fa-check" style={{display: `${completion[topic.id]?'inline-block':'none'}`}} aria-hidden="true"/>
                             </div>
-                            <div className="w3-text-green" style={{display: `${completion[topic.id]?'block':'none'}`, position: 'absolute', top: 0, right: 0}}>
-                              <i className="fa fa-check" aria-hidden="true"></i>
+                            <div className="w3-cell" style={{fontStyle: 'normal'}}>
+                              <div className="w3-text-grey w3-small"> Topic {index+1} </div>
+                              <div style={{whiteSpace: 'normal'}} > {topic.title} </div>
                             </div>
                           </div>
                         </a>
@@ -65,8 +65,8 @@ export default class TopicDropBox extends Component {
     this.setState({ showDropdown: false })
   }
   _findCompletedTopics() {
-    const progress = this.props.progress
-    const content = this.props.content;
+    const progress = this.props.progress && this.props.progress.study || {}
+    const content = this.props.content
     const topics = content.topics
     const completed = {}
     for (let t in progress) {

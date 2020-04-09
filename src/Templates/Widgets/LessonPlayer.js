@@ -3,9 +3,9 @@
 import React, { Component } from 'react'
 
 import { ContentPresenter } from 'content-presenter'
-import { YoutubePlayerReactPlugin } from 'youtube-player-plugin'
-import { QuizPlayerReactPlugin } from 'quiz-player-plugin'
-import { PromptPlayerReactPlugin } from 'prompt-player-plugin'
+import { YoutubePlayerReactPlugin } from '@elearn/youtube-player-plugin'
+import { QuizPlayerReactPlugin } from '@elearn/quiz-player-plugin'
+import { PromptPlayerReactPlugin } from '@elearn/prompt-player-plugin'
 
 export default class LessonPlayer extends Component {
   constructor(props) {

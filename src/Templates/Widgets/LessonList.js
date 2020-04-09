@@ -8,7 +8,7 @@ export default class LessonList extends Component {
   }
   render() {
     const lessons =  (this.props.topic && this.props.topic.lessons) || undefined
-    const progress = (this.props.topic && this.props.progress && this.props.progress[this.props.topic.id]) || {}
+    const progress = (this.props.topic && this.props.progress && this.props.progress.study && this.props.progress.study[this.props.topic.id]) || {}
     return (
       <div>
         <h4 className="w3-white" > Lessons </h4>

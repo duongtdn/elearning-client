@@ -69,9 +69,10 @@ export default class StudyProgress extends Component {
           <div className="" style={{display: this.state.showDetailTestResults? 'block': 'none'}}>
             <table className="w3-table">
               <tbody>{
-                this.props.tests.map( (test, index) => {
-                  const score = (test.result && test.result.score) || null
-                  const status = (test.result && test.result.status) || null;
+                content.tests.map( (test, index) => {
+                  const testResults = this.props.progress.test
+                  const score = (testResults && testResults[test.examId] && testResults[test.examId].result && testResults[test.examId].result.score) || null
+                  const status = (testResults && testResults[test.examId] && testResults[test.examId].result && testResults[test.examId].result.status) || null
                   return (
                     <tr className="w3-border-bottom" key={index} >
                       <td className="w3-container">
@@ -132,7 +133,10 @@ export default class StudyProgress extends Component {
   }
 
   _calculateTopicCompletion(topic) {
-    const progress = this.props.progress
+    if (!this.props.progress || !this.props.progress.study) {
+      return  `0%`
+    }
+    const progress = this.props.progress.study
     if (progress && progress[topic.id]) {
       const max = topic.lessons.length
       const p = progress[topic.id]
@@ -144,14 +148,14 @@ export default class StudyProgress extends Component {
   }
 
   _calculateTestsCompletion() {
-    if (!this.props.testResults) {
+    if (!this.props.progress || !this.props.progress.test) {
       return  `0%`
     }
-    const testResults = this.props.testResults
-    const tests = this.props.tests
+    const testResults = this.props.progress.test
+    const tests = this.props.content.tests
     let completed = 0
     tests.forEach(test => {
-      if (testResults[test.id] && testResults[test.id].score >= test.require) {
+      if (testResults[test.examId] && testResults[test.examId].resultId) {
         completed++
       }
     })

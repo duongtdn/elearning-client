@@ -22,7 +22,7 @@ export default class CourseOverview extends Component {
         <hr />
 
         <div>
-          <a href="#study" className="w3-bar-item w3-button w3-blue" onClick={e => this.props.navigate('study')}>
+          <a className="w3-bar-item w3-button w3-blue" onClick={e => this.props.route.navigate('study',{data: {id: this.props.contentId}})}>
             <i className="fa fa-tv"/> Begin Studying
           </a>
         </div>

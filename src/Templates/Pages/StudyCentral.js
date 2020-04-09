@@ -2,18 +2,20 @@
 
 import React, { Component } from 'react'
 
-import href from '../../lib/href'
-
 import TopicDropBox from '../Widgets/TopicDropBox'
 import LessonList from '../Widgets/LessonList'
 import LessonPlayer from '../Widgets/LessonPlayer'
+
+const BOOKMARK = '__$_bookmark__';
 
 export default class StudyCentral extends Component {
   constructor(props) {
     super(props)
 
+    const href = props.href;
+
     const bookmark = href.getBookmark()
-    const lastTopicBookmarked = localStorage.getItem(href.key.bookmark) || undefined
+    const lastTopicBookmarked = localStorage.getItem(BOOKMARK) || undefined
     const topicIndexFromBookmark = !(isNaN(bookmark) || isNaN(parseInt(bookmark))) ? parseInt(bookmark-1)
                                       : !(isNaN(lastTopicBookmarked) || isNaN(parseInt(lastTopicBookmarked))) ? parseInt(lastTopicBookmarked-1)
                                       : 0
@@ -24,13 +26,13 @@ export default class StudyCentral extends Component {
       currentSubLessonIndex: null
     }
 
-    const methods = ['moveToNextLesson', 'moveToPreviousLesson', 'onLessonCompleted']
+    const methods = ['moveToNextLesson', 'moveToPreviousLesson', 'onLessonCompleted', 'onSelectTopic']
     methods.forEach(method => this[method] = this[method].bind(this))
 
     setTimeout( _ => this._setBookmark(), 0)
+    props.page.on('enter', () => this._setBookmark())
   }
   render() {
-    this._setBookmark()
     const content = this.props.content
     const topic = content.topics[this.state.currentTopicIndex]
     const lesson = this.state.currentSubLessonIndex === null ?
@@ -40,7 +42,7 @@ export default class StudyCentral extends Component {
       <div className="w3-container">
         <TopicDropBox content = {content}
                       currentTopicIndex = {this.state.currentTopicIndex}
-                      onSelectTopic = { index => { this.setState({currentTopicIndex: index}) } }
+                      onSelectTopic = {this.onSelectTopic}
                       progress = {this.props.progress}
         />
         <div className="row" style={{margin: '16px 0'}}>
@@ -127,21 +129,28 @@ export default class StudyCentral extends Component {
       this._completeAndMoveToNextLesson()
     }
   }
+  onSelectTopic(index) {
+    if (index !== this.state.currentTopicIndex) {
+      this.setState({currentTopicIndex: index, currentLessonIndex: 0, currentSubLessonIndex: null,});
+      this._setBookmark(index);
+    }
+  }
   _completeAndMoveToNextLesson() {
     const content = this.props.content
     const topic = content.topics[this.state.currentTopicIndex]
     const lesson = topic.lessons[this.state.currentLessonIndex]
 
-    const progress = {}
-    progress[topic.id] = {}
-    progress[topic.id][lesson.id] = true
+    const study = {}
+    study[topic.id] = {}
+    study[topic.id][lesson.id] = true
 
-    this.props.updateProgress && this.props.updateProgress(progress)
+    this.props.updateProgress && this.props.updateProgress({ study })
 
     this.moveToNextLesson()
   }
-  _setBookmark() {
-    href.set(`#${this.state.currentTopicIndex+1}`)
-    localStorage.setItem(href.key.bookmark, this.state.currentTopicIndex+1)
+  _setBookmark(index) {
+    const bookmark = index === undefined ? this.state.currentTopicIndex+1 : index+1;
+    this.props.href.set(`#${bookmark}`)
+    localStorage.setItem(BOOKMARK, bookmark)
   }
 }

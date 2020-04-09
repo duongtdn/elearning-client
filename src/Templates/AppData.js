@@ -2,14 +2,11 @@
 
 import React, { Component } from 'react'
 
-import { xhttp } from 'authenform-utils'
+import xhttp from '@realmjs/xhttp-request'
 
-import href from '../lib/href'
-import AppShell from './AppShell'
+import App from './App'
 import Error from './Error'
 import Loading from './Loading'
-
-const query = href.getQuery()
 
 const progress = {
   key: '__$_Progress__',
@@ -18,46 +15,50 @@ const progress = {
       this[key] = options[key]
     }
   },
+  content: null,
   get(done) {
+    if (!this.contentId) {
+      return null
+    }
     // get progress from server. meanwhile return a local storage version (cached) if any
-    xhttp.get(`${this.urlBasePath}/progress?c=${query.c}`,
-      { authen: true },
-      (status, response) => {
-        this.clear()
-        if (status === 200 || status === 404) {
-          const data = JSON.parse(response)
-          if (data && data.progress) {
-            this.store(data.progress)
-            done && done(data.progress)
-          } else {
-            done && done(null)
-          }
+    xhttp.get(`${this.urlBasePath}/progress?c=${this.contentId}`, { authen: true })
+    .then( ({status, responseText}) => {
+      this.clear()
+      if (status === 200) {
+        const data = JSON.parse(responseText)
+        if (data) {
+          this.store(data)
+          done && done(data)
         } else {
-          console.error(status)
+          done && done(null)
         }
+      } else {
+        console.error(status)
+        done && done(null)
       }
-    )
-    return localStorage.getItem('__$_Progress__') && JSON.parse(localStorage.getItem(this.key) )
+    })
+    return localStorage.getItem(this.key) && JSON.parse(localStorage.getItem(this.key) )
   },
-  update(progress, done) {
+  update(progress, setFlag, done) {
+    console.log(`update progress with flag is ${setFlag}`)
     const updatedProgress = this.store(progress)
-    xhttp.put(`${this.urlBasePath}/progress`,
-      { id: query.c, progress },
-      { authen: true },
-      (status) => {
-        if (status === 200) {
-          done && done(updatedProgress)
-        } else {
-          console.error(status)
-        }
+    xhttp.put(`${this.urlBasePath}/progress`, { id: this.contentId, progress, setFlag }, { authen: true })
+    .then( ({status}) => {
+      if (status === 200) {
+        done && done(updatedProgress)
+      } else {
+        console.error(status)
       }
-    )
+    })
     return updatedProgress
   },
   store(progress) {
-    const storedProgress = JSON.parse(localStorage.getItem('__$_Progress__') ) || {}
-    for (let t in progress) {
-      storedProgress[t] = {...storedProgress[t], ...progress[t]}
+    const storedProgress = JSON.parse(localStorage.getItem(this.key) ) || { study: {}, test: {} }
+    for (let t in progress.study) {
+      storedProgress.study[t] = {...storedProgress.study[t], ...progress.study[t]}
+    }
+    for (let t in progress.test) {
+      storedProgress.test[t] = {...storedProgress.test[t], ...progress.test[t]}
     }
     localStorage.setItem(this.key, JSON.stringify(storedProgress))
     return storedProgress
@@ -71,21 +72,53 @@ const progress = {
 export default class AppData extends Component {
   constructor(props) {
     super(props)
-    progress.config({urlBasePath: this.props.env.urlBasePath || ''})
+
+    progress.config({urlBasePath: props.env.urlBasePath || '', contentId: props.contentId})
+    this._queueFn = []
     this.state = {
       loading: true,
       err: null,
       content: null,
-      progress: progress.get(progress => this.setState({progress}))
+      progress: progress.get(pg => {
+        if (!pg) {
+          // init progress for the first time
+          if (this.state.loading) {
+            // content is not loaded yet, defer init progress
+            this._queueFn.push('initProgress')
+          } else {
+            this.initProgress(this.state.content)
+          }
+        } else {
+          this.setState({progress: pg})
+        }
+      })
     }
-    this.loadContent().then( ({content, tests}) => this.setState({loading: false, content, tests})).catch(err => this.setState({loading: false, err}))
+    this.loadContent(props.contentId)
+    .then(content => {
+      if (this._queueFn.length > 0) {
+        this[this._queueFn.pop()](content)
+      }
+      this.setState({loading: false, content})
+    })
+    .catch(err => {
+      this.setState({loading: false, err})
+    })
+  }
+  initProgress(content) {
+    if (content) {
+      const study = {}
+      const test = {}
+      content.topics.forEach(topic => {
+        study[topic.id] = {}
+        topic.lessons.forEach(lesson => study[topic.id][lesson.id] = false )
+      })
+      content.tests.forEach(t => {
+        test[t.examId] = {}
+      })
+      this.setState({ progress: progress.update({study, test}, true) })
+    }
   }
   render() {
-    console.log('AppData.render')
-    console.log(this.props.user)
-    if (!query || !query.c) {
-      return (<Error code = '400' message = 'Invalid query' />)
-    }
     if (this.props.user === null) { return null }
     if (this.props.user === undefined) {
       return (<Error code = '403' message = 'Forbidden' />)
@@ -97,30 +130,26 @@ export default class AppData extends Component {
       return(<Error code = {this.state.err} message = 'Error found' />)
     }
     return (
-      <AppShell user = {this.props.user}
-                accountClient = {this.props.accountClient}
-                env = {this.props.env}
-                content = {this.state.content}
-                tests = {this.state.tests}
-                progress = {this.state.progress}
-                updateProgress = { p => this.setState({ progress: progress.update(p) }) }
+      <App  {...this.props}
+            content = {this.state.content}
+            progress = {this.state.progress}
+            updateProgress = { p => this.setState({ progress: progress.update(p) }) }
       />
     )
   }
-  loadContent() {
+  loadContent(contentId) {
     const urlBasePath = this.props.env.urlBasePath || ''
     return new Promise((resolve, reject) => {
-      xhttp.get(`${urlBasePath}/content?c=${query.c}`,
-        { authen: true },
-        (status, response) => {
-          if (status === 200) {
-            const {content, tests} = JSON.parse(response)
-            resolve({content, tests})
-          } else {
-            reject(status)
-          }
+      xhttp.get(`${urlBasePath}/content?c=${contentId}`, { authen: true })
+      .then( ({status, responseText}) => {
+        if (status === 200) {
+          const content = JSON.parse(responseText)
+          resolve(content)
+        } else {
+          reject(status)
         }
-      )
+      })
+      .catch(err => console.log(err))
     })
   }
 }
