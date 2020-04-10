@@ -4,8 +4,7 @@ const path = require("path");
 
 module.exports = {
   entry: {
-    exam: ['./src/scripts/exam.js'],
-    result: ['./src/scripts/result.js']
+    app: ["./src/scripts/app.js"]
   },
   output: {
     path: path.resolve(__dirname, "build/"),
@@ -19,6 +18,5 @@ module.exports = {
       }
     ]
   },
-  mode: 'development',
-  devtool: 'inline-source-map'
+  mode: 'production',
 }

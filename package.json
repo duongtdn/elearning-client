@@ -4,6 +4,8 @@
   "description": "client scripts of elearning webpage",
   "main": "index.js",
   "scripts": {
+    "clean": "rm -rf build",
+    "build": "npm run clean && webpack --config webpack.build.config.js && cp index.html build/index.html",
     "start": "webpack-dev-server --config webpack.dev.config.js  --port 3300"
   },
   "repository": {
