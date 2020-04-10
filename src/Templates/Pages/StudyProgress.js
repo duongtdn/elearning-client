@@ -17,7 +17,7 @@ export default class StudyProgress extends Component {
     const content = this.props.content
     const topics = content.topics
     return (
-      <div className="w3-container">
+      <div className="w3-container" style={{maxWidth: '1200px'}}>
 
         <h2 style={{marginTop: '16px'}}>
           <div className="w3-cell">
@@ -80,7 +80,7 @@ export default class StudyProgress extends Component {
                         <span className="w3-text-grey " > {test.description} </span> <br />
                         {/* <button className="w3-button w3-blue w3-small"> Take Test </button> */}
                       </td>
-                      <td className="w3-container" style={{ verticalAlign: 'middle'}}>
+                      <td className="w3-container" style={{ verticalAlign: 'middle', textAlign: 'right'}}>
                         {
                           status ?
                             <span className={`w3-text-${status === 'passed' ? 'green' : 'red'}`} >
